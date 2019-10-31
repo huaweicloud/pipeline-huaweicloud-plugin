@@ -37,6 +37,10 @@ import org.kohsuke.stapler.DataBoundSetter;
 
 import com.google.common.base.Preconditions;
 import com.obs.services.ObsClient;
+import com.obs.services.model.PutObjectRequest;
+import com.obs.services.model.ProgressListener;
+import com.obs.services.model.ProgressStatus;
+
 import com.huawei.openstack4j.openstack.fgs.v2.domain.FunctionMetadata;
 import com.huawei.openstack4j.api.OSClient;
 import com.huawei.openstack4j.api.types.ServiceType;
@@ -374,18 +378,31 @@ public class OBSUploadStep extends Step {
 			ObsClient obs =
 				OBSClientFactory.createHuaweiObsClient(this.envVars);
 
-				if (localFile.isFile()) {
-					String path = this.path;
-					if (path.endsWith("/") || path.isEmpty()) {
-						path += localFile.getName();
-					}
-					if (!obs.headBucket(this.bucket)) {
-						throw new FileNotFoundException("Bucket "
-							+ this.bucket + " does not exist");
-					}
+			if (localFile.isFile()) {
+				String path = this.path;
+				if (path.endsWith("/") || path.isEmpty()) {
+					path += localFile.getName();
+				}
+				if (!obs.headBucket(this.bucket)) {
+					throw new FileNotFoundException("Bucket "
+						+ this.bucket + " does not exist");
+				}
 
-					obs.putObject(this.bucket, path, localFile);
+				PutObjectRequest request = new PutObjectRequest(this.bucket, path);
+				request.setFile(localFile);
+				request.setProgressListener(new ProgressListener() {
 
+					@Override
+					public void progressChanged(ProgressStatus status) {
+						taskListener.getLogger().format("...Upload file to " +
+							"obs bucket, average speed:%s, " +
+							"percentage:%s%%%n", status.getAverageSpeed(),
+							status.getTransferPercentage());
+					}
+				});
+				// get upload progress feedback in every 1MB data
+				request.setProgressInterval(1024 * 1024L);
+				obs.putObject(request);
 				return null;
 			}
 
