@@ -8,7 +8,7 @@ cd pipeline-huaweicloud-plugin
 mvn package -DskipTests
 ``` 
 
-install pipeline-huaweicloud-plugin/target/pipeline-huaweicloud.hpi in jenkins (http://127.0.0.1/pluginManager/advanced)
+install pipeline-huaweicloud-plugin/target/pipeline-huaweicloud.hpi in jenkins (such as: http://127.0.0.1/pluginManager/advanced)
 
 
 # Usage / Steps
