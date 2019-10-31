@@ -1,6 +1,15 @@
 # pipeline-huaweicloud-plugin
 This plugins adds Jenkins pipeline steps to interact with the HuaweiCloud API.
 
+# How to build it
+```
+git clone https://github.com/huaweicloud/pipeline-huaweicloud-plugin
+cd pipeline-huaweicloud-plugin
+mvn package -DskipTests
+``` 
+
+install pipeline-huaweicloud-plugin/target/pipeline-huaweicloud.hpi in jenkins (http://127.0.0.1/pluginManager/advanced)
+
 
 # Usage / Steps
 
