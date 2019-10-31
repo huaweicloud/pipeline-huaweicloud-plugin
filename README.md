@@ -26,7 +26,7 @@ stages {
 	...
 }
 ```
-## s3Upload
+## obsUpload
 
 Upload a file from the workspace (or a String) to an OBS bucket.
 ```groovy
