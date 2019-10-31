@@ -7,9 +7,6 @@ This plugins adds Jenkins pipeline steps to interact with the HuaweiCloud API.
 ## withOBS
 
 the `withOBS` step provides authorization for the nested steps.
-You can provide region and profile information or let Jenkins
-assume a role in another or the same AWS account.
-You can mix all parameters in one `withOBS` block.
 
 Set region, endpointUrl, credentials information:
 
