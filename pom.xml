@@ -12,11 +12,9 @@
     <version>1.39-SNAPSHOT</version>
     <packaging>hpi</packaging>
     <name>Pipeline: HuaweiCloud Steps</name>
-    <description>This plugins adds Jenkins pipeline steps to interact with
-        the HuaweiCloud API</description>
+    <description>This plugins adds Jenkins pipeline steps to interact with the HuaweiCloud API</description>
     <scm>
-        <connection>scm:git:ssh://github.com/jenkinsci/pipeline-huaweicloud
-            -plugin.git</connection>
+        <connection>scm:git:ssh://github.com/jenkinsci/pipeline-huaweicloud-plugin.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/jenkinsci/pipeline-huaweicloud-plugin.git</developerConnection>
         <url>https://github.com/jenkinsci/pipeline-huaweicloud-plugin</url>
       <tag>HEAD</tag>
