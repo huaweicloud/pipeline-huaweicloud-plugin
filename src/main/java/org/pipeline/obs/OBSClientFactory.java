@@ -10,7 +10,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * #L%
  */
 package org.pipeline.obs;
 
@@ -40,7 +39,6 @@ public class OBSClientFactory {
 	static final String OBS_DEFAULT_PROFILE = "OBS_DEFAULT_PROFILE";
 	static final String OBS_ACCESS_KEY_ID = "OBS_ACCESS_KEY_ID";
 	static final String OBS_SECRET_ACCESS_KEY = "OBS_SECRET_ACCESS_KEY";
-	static final String OBS_SESSION_TOKEN = "OBS_SESSION_TOKEN";
 	static final String OBS_DEFAULT_REGION = "OBS_DEFAULT_REGION";
 	static final String OBS_REGION = "OBS_REGION";
 	static final String OBS_ENDPOINT_URL = "OBS_ENDPOINT_URL";

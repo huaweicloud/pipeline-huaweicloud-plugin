@@ -24,25 +24,4 @@
 	<f:entry title="${%Metadatas}" field="metadatas">
 		<f:textbox />
 	</f:entry>
-	<f:entry title="${%CacheControl}" field="cacheControl">
-        <f:textbox />
-    </f:entry>
-	<f:entry title="${%SSEAlgorithm}" field="sseAlgorithm">
-        <f:textbox />
-    </f:entry>
-	<f:entry title="${%ACL}" field="acl" name="acl">
-        <select name="acl">
-            <option value="Private">Private</option>
-            <option value="PublicRead">PublicRead</option>
-            <option value="PublicReadWrite">PublicReadWrite</option>
-            <option value="AuthenticatedRead">AuthenticatedRead</option>
-            <option value="LogDeliveryWrite">LogDeliveryWrite</option>
-            <option value="BucketOwnerRead">BucketOwnerRead</option>
-            <option value="BucketOwnerFullControl">BucketOwnerFullControl</option>
-            <option value="AwsExecRead">AwsExecRead</option>
-        </select>
-    </f:entry>
-	<f:entry title="${%Redirect Location}" field="redirectLocation">
-		<f:textbox />
-	</f:entry>
 </j:jelly>

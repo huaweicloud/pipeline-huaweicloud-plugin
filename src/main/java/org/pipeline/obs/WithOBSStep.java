@@ -10,7 +10,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * #L%
  */
 
 package org.pipeline.obs;
@@ -49,42 +48,13 @@ import hudson.util.ListBoxModel;
 
 public class WithOBSStep extends Step {
 
-	private String role = "";
-	private String roleAccount = "";
 	private String region = "";
 	private String endpointUrl = "";
-	private String profile = "";
 	private String credentials = "";
-	private String externalId = "";
-	private String federatedUserId = "";
-	private String policy = "";
-	private String iamMfaToken = "";
-	private Integer duration = 3600;
-	private String roleSessionName;
-	private String principalArn = "";
-	private String samlAssertion = "";
 
 	@DataBoundConstructor
 	public WithOBSStep() {
 		//
-	}
-
-	public String getRole() {
-		return this.role;
-	}
-
-	@DataBoundSetter
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	public String getRoleAccount() {
-		return this.roleAccount;
-	}
-
-	@DataBoundSetter
-	public void setRoleAccount(String roleAccount) {
-		this.roleAccount = roleAccount;
 	}
 
 	public String getRegion() {
@@ -105,15 +75,6 @@ public class WithOBSStep extends Step {
 		this.endpointUrl = endpointUrl;
 	}
 
-	public String getProfile() {
-		return this.profile;
-	}
-
-	@DataBoundSetter
-	public void setProfile(String profile) {
-		this.profile = profile;
-	}
-
 	public String getCredentials() {
 		return this.credentials;
 	}
@@ -121,78 +82,6 @@ public class WithOBSStep extends Step {
 	@DataBoundSetter
 	public void setCredentials(String credentials) {
 		this.credentials = credentials;
-	}
-
-	public String getExternalId() {
-		return this.externalId;
-	}
-
-	@DataBoundSetter
-	public void setExternalId(String externalId) {
-		this.externalId = externalId;
-	}
-
-	public String getIamMfaToken() {
-		return this.iamMfaToken;
-	}
-
-	@DataBoundSetter
-	public void setIamMfaToken(String iamMfaToken) {
-		this.iamMfaToken = iamMfaToken;
-	}
-
-	public String getFederatedUserId() {
-		return this.federatedUserId;
-	}
-
-	@DataBoundSetter
-	public void setFederatedUserId(String federatedUserId) {
-		this.federatedUserId = federatedUserId;
-	}
-
-	public String getPolicy() {
-		return this.policy;
-	}
-
-	@DataBoundSetter
-	public void setPolicy(String policy) {
-		this.policy = policy;
-	}
-
-	public Integer getDuration() {
-		return this.duration;
-	}
-
-	@DataBoundSetter
-	public void setDuration(Integer duration) {
-		this.duration = duration;
-	}
-
-	public String getRoleSessionName() {
-		return this.roleSessionName;
-	}
-
-	@DataBoundSetter
-	public void setRoleSessionName(String roleSessionName) {
-		this.roleSessionName = roleSessionName;
-	}
-
-	public String getPrincipalArn() {
-		return this.principalArn;
-	}
-
-	@DataBoundSetter
-	public void setPrincipalArn(final String principalArn) {
-		this.principalArn = principalArn;
-	}
-
-	public String getSamlAssertion() {
-		return this.samlAssertion;
-	}
-
-	@DataBoundSetter
-	public void setSamlAssertion(final String samlAssertion) {
-		this.samlAssertion = samlAssertion;
 	}
 
 	@Override
@@ -264,13 +153,13 @@ public class WithOBSStep extends Step {
 			obsEnv.override(OBSClientFactory.OBS_DEFAULT_REGION, this.step.getRegion());
 			obsEnv.override(OBSClientFactory.OBS_REGION, this.step.getRegion());
 
-
 			StandardUsernamePasswordCredentials usernamePasswordCredentials = CredentialsProvider.findCredentialById(this.step.getCredentials(),
 				StandardUsernamePasswordCredentials.class, this.getContext().get(Run.class), Collections.emptyList());
 
 			if (usernamePasswordCredentials != null) {
 				obsEnv.override(OBSClientFactory.OBS_ACCESS_KEY_ID, usernamePasswordCredentials.getUsername());
-				obsEnv.override(OBSClientFactory.OBS_SECRET_ACCESS_KEY, usernamePasswordCredentials.getPassword().getPlainText());
+				obsEnv.override(OBSClientFactory.OBS_SECRET_ACCESS_KEY,
+					usernamePasswordCredentials.getPassword().getPlainText());
 			}
 
 			obsEnv.override(OBSClientFactory.OBS_ENDPOINT_URL, this.step.getEndpointUrl());
@@ -292,7 +181,6 @@ public class WithOBSStep extends Step {
 				+ "\"Effect\":\"Allow\",\"Resource\":\"*\"}]}";
 
 		private static final long serialVersionUID = 1L;
-
 	}
 
 }

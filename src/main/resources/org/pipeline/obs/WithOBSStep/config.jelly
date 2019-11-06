@@ -9,28 +9,4 @@
 	<f:entry title="${%Credentials}" field="credentials">
 		<c:select />
 	</f:entry>
-	<f:entry title="${%Profile}" field="profile">
-		<f:textbox />
-	</f:entry>
-	<f:entry title="${%Role}" field="role">
-		<f:textbox />
-	</f:entry>
-	<f:entry title="${%Role Account}" field="roleAccount">
-		<f:textbox />
-	</f:entry>
-	<f:entry title="${%SAML Assertion}" field="samlAssertion">
-        <f:textbox />
-    </f:entry>
-    <f:entry title="${%Principal ARN}" field="principalArn">
-        <f:textbox />
-    </f:entry>
-	<f:entry title="${%External ID}" field="externalId">
-		<f:textbox />
-	</f:entry>
-	<f:entry title="${%Policy}" field="policy">
-		<f:textbox />
-	</f:entry>
-	<f:entry title="${%Federated User ID}" field="federatedUserId">
-		<f:textbox />
-	</f:entry>
 </j:jelly>

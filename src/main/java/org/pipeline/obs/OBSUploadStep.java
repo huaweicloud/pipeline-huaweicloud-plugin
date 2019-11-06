@@ -10,7 +10,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * #L%
  */
 
 package org.pipeline.obs;
@@ -67,16 +66,10 @@ public class OBSUploadStep extends Step {
 	private String file;
 	private String text;
 	private String path = "";
-	private String kmsId;
 	private String includePathPattern;
 	private String excludePathPattern;
 	private String workingDir;
 	private String[] metadatas;
-	private String cacheControl;
-	private String contentEncoding;
-	private String contentType;
-	private String sseAlgorithm;
-	private String redirectLocation;
 	private boolean verbose = true;
 
 	@DataBoundConstructor
@@ -108,15 +101,6 @@ public class OBSUploadStep extends Step {
 
 	public String getPath() {
 		return this.path;
-	}
-
-	public String getKmsId() {
-		return this.kmsId;
-	}
-
-	@DataBoundSetter
-	public void setKmsId(String kmsId) {
-		this.kmsId = kmsId;
 	}
 
 	@DataBoundSetter
@@ -151,15 +135,6 @@ public class OBSUploadStep extends Step {
 		this.workingDir = workingDir;
 	}
 
-	public String getRedirectLocation() {
-		return this.redirectLocation;
-	}
-
-	@DataBoundSetter
-	public void setRedirectLocation(String redirectLocation) {
-		this.redirectLocation = redirectLocation;
-	}
-
 	public String[] getMetadatas() {
 		if (this.metadatas != null) {
 			return this.metadatas.clone();
@@ -175,42 +150,6 @@ public class OBSUploadStep extends Step {
 		} else {
 			this.metadatas = null;
 		}
-	}
-
-	public String getCacheControl() {
-		return this.cacheControl;
-	}
-
-	@DataBoundSetter
-	public void setCacheControl(final String cacheControl) {
-		this.cacheControl = cacheControl;
-	}
-
-	public String getContentEncoding() {
-		return this.contentEncoding;
-	}
-
-	@DataBoundSetter
-	public String setContentEncoding(final String contentEncoding) {
-		return this.contentEncoding = contentEncoding;
-	}
-
-	public String getContentType() {
-		return this.contentType;
-	}
-
-	@DataBoundSetter
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-
-	public String getSseAlgorithm() {
-		return this.sseAlgorithm;
-	}
-
-	@DataBoundSetter
-	public void setSseAlgorithm(String sseAlgorithm) {
-		this.sseAlgorithm = sseAlgorithm;
 	}
 
 	@DataBoundSetter
@@ -263,16 +202,10 @@ public class OBSUploadStep extends Step {
 			final String text = this.step.getText();
 			final String bucket = this.step.getBucket();
 			final String path = this.step.getPath();
-			final String kmsId = this.step.getKmsId();
 			final String includePathPattern = this.step.getIncludePathPattern();
 			final String excludePathPattern = this.step.getExcludePathPattern();
 			final String workingDir = this.step.getWorkingDir();
 			final Map<String, String> metadatas = new HashMap<>();
-			final String cacheControl = this.step.getCacheControl();
-			final String contentEncoding = this.step.getContentEncoding();
-			final String contentType = this.step.getContentType();
-			final String sseAlgorithm = this.step.getSseAlgorithm();
-			final String redirectLocation = this.step.getRedirectLocation();
 			final boolean verbose = this.step.getVerbose();
 			boolean omitSourcePath = false;
 			boolean sendingText = false;
@@ -325,18 +258,20 @@ public class OBSUploadStep extends Step {
 					throw new FileNotFoundException(child.toURI().toString());
 				}
 
-				child.act(new RemoteUploader(Execution.this.getContext().get(EnvVars.class), listener, bucket, path, metadatas, cacheControl, contentEncoding, contentType, kmsId, sseAlgorithm, redirectLocation));
+				child.act(new RemoteUploader(Execution.this.getContext().get(EnvVars.class), listener, bucket, path, metadatas));
 
 				listener.getLogger().println("Upload complete");
 				return String.format("obs://%s/%s", bucket, path);
 			} else {
+				listener.getLogger().println("Not support upload from " +
+					"directory");
 				List<File> fileList = new ArrayList<>();
 				listener.getLogger().format("Uploading %s to obs://%s/%s %n",
 					includePathPattern, bucket, path);
 				for (FilePath child : children) {
 					fileList.add(child.act(FIND_FILE_ON_SLAVE));
 				}
-				dir.act(new RemoteListUploader(Execution.this.getContext().get(EnvVars.class), listener, fileList, bucket, path, metadatas, cacheControl, contentEncoding, contentType, kmsId, sseAlgorithm));
+				dir.act(new RemoteListUploader(Execution.this.getContext().get(EnvVars.class), listener, fileList, bucket, path, metadatas));
 				listener.getLogger().println("Upload complete");
 				return String.format("obs://%s/%s", bucket, path);
 			}
@@ -352,25 +287,13 @@ public class OBSUploadStep extends Step {
 		private final String bucket;
 		private final String path;
 		private final Map<String, String> metadatas;
-		private final String cacheControl;
-		private final String contentEncoding;
-		private final String contentType;
-		private final String kmsId;
-		private final String sseAlgorithm;
-		private final String redirectLocation;
 
-		RemoteUploader(EnvVars envVars, TaskListener taskListener, String bucket, String path, Map<String, String> metadatas, String cacheControl, String contentEncoding, String contentType, String kmsId, String sseAlgorithm, String redirectLocation) {
+		RemoteUploader(EnvVars envVars, TaskListener taskListener, String bucket, String path, Map<String, String> metadatas) {
 			this.envVars = envVars;
 			this.taskListener = taskListener;
 			this.bucket = bucket;
 			this.path = path;
 			this.metadatas = metadatas;
-			this.cacheControl = cacheControl;
-			this.contentEncoding = contentEncoding;
-			this.contentType = contentType;
-			this.kmsId = kmsId;
-			this.sseAlgorithm = sseAlgorithm;
-			this.redirectLocation = redirectLocation;
 		}
 
 		@Override
@@ -396,7 +319,8 @@ public class OBSUploadStep extends Step {
 					public void progressChanged(ProgressStatus status) {
 						taskListener.getLogger().format("...Upload file to " +
 							"obs bucket, average speed:%s, " +
-							"percentage:%s%%%n", status.getAverageSpeed(),
+							"percentage:%s%%%n",
+							status.getAverageSpeed(),
 							status.getTransferPercentage());
 					}
 				});
@@ -419,24 +343,14 @@ public class OBSUploadStep extends Step {
 		private final String path;
 		private final List<File> fileList;
 		private final Map<String, String> metadatas;
-		private final String cacheControl;
-		private final String contentEncoding;
-		private final String contentType;
-		private final String kmsId;
-		private final String sseAlgorithm;
 
-		RemoteListUploader(EnvVars envVars, TaskListener taskListener, List<File> fileList, String bucket, String path, Map<String, String> metadatas, final String cacheControl, final String contentEncoding, final String contentType, String kmsId, String sseAlgorithm) {
+		RemoteListUploader(EnvVars envVars, TaskListener taskListener, List<File> fileList, String bucket, String path, Map<String, String> metadatas) {
 			this.envVars = envVars;
 			this.taskListener = taskListener;
 			this.fileList = fileList;
 			this.bucket = bucket;
 			this.path = path;
 			this.metadatas = metadatas;
-			this.cacheControl = cacheControl;
-			this.contentEncoding = contentEncoding;
-			this.contentType = contentType;
-			this.kmsId = kmsId;
-			this.sseAlgorithm = sseAlgorithm;
 		}
 
 		@Override
@@ -451,5 +365,4 @@ public class OBSUploadStep extends Step {
 			return localFile;
 		}
 	};
-
 }
