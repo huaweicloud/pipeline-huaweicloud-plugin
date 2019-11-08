@@ -7,7 +7,6 @@
         <version>3.18</version>
         <relativePath />
     </parent>
-    <groupId>org</groupId>
     <artifactId>pipeline-huaweicloud</artifactId>
     <version>1.39-SNAPSHOT</version>
     <packaging>hpi</packaging>
