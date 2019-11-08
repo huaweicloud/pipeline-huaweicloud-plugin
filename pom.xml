@@ -26,6 +26,13 @@
             <distribution>repo</distribution></license>
     </licenses>
     <url>https://wiki.jenkins.io/display/JENKINS/Pipeline+HuaweiCloud+Plugin</url>
+    <developers>
+        <developer>
+            <id>zhongjun2</id>
+            <name>zhongjun</name>
+            <email>jun.zhongjun2@gmail.com</email>
+        </developer>
+    </developers>
     <repositories>
         <repository>
             <id>repo.jenkins-ci.org</id>
